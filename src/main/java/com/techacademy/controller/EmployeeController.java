@@ -56,6 +56,12 @@ public class EmployeeController {
         return "employees/new";
     }
 
+    // 従業員更新画面
+    @GetMapping(value = "/{code}/update")
+    public String edit() {
+        return "employees/update";
+    }
+
     // 従業員新規登録処理
     @PostMapping(value = "/add")
     public String add(@Validated Employee employee, BindingResult res, Model model) {
@@ -112,5 +118,11 @@ public class EmployeeController {
 
         return "redirect:/employees";
     }
+
+    //従業員更新処理
+    //@PostMapping(value = "/{code}/update")
+    //public String update () {
+    //    return "employees/update";
+    //}
 
 }

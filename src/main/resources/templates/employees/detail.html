@@ -53,6 +53,9 @@
                                     <div class="col-auto">
                                         <a th:href="@{/employees}" class="btn btn-primary">戻る</a>
                                     </div>
+                                    <div>
+                                        <a th:href="@{/employees/{code}/update(code=${employee.code})}">更新</a>
+                                    </div>
                                 </div>
                                 <span th:if="${deleteError} neq null" th:text="${deleteError}" class="text-danger"></span>
                             </div>
