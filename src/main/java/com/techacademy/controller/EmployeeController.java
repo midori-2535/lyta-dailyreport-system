@@ -98,6 +98,20 @@ public class EmployeeController {
         return "redirect:/employees";
     }
 
+ // 従業員更新画面
+    @GetMapping(value = "/{code}/update")
+    // @PathVariableでパスパラメータ{code}の値をString型の変数として取得、Modelのインスタンス化
+    public String edit(@PathVariable("code") String code, Model model) {
+        //サービスにて主キー(code)にて一件の検索結果をemployeeに代入
+        Employee employee = employeeService.findByCode(code);
+        // パスワードを空文字にし、画面に非表示にする
+        employee.setPassword("");
+        // Modelにemployeeという名前で、employeeのデータを格納
+        model.addAttribute("employee", employee);
+        // 更新画面へ遷移
+        return "employees/update";
+    }
+
     // 従業員更新処理
     @PostMapping(value = "/{code}/update")
     // フォームから送信されたデータをEmployeeエンティティにつめ、@Validatedでエンティティの設定にある入力チェックをし、結果をBindingResultに格納し、モデルのインスタンス化（再表示用）
@@ -111,33 +125,17 @@ public class EmployeeController {
             return "employees/update";
         }
 
-     // パスワードが空文字" "かどうかをチェック、getPassword()はemployeeエンティティの@Dataで生成
-        if ("".equals(employee.getPassword())) {
+        // サービスのupdateメソッドを呼び出し、ErrorKindsの列挙子をresulに代入
+        ErrorKinds result = employeeService.update(code, employee);
 
-            // パスワードが空だった場合、 データベースに設定済みの値を設定する
-            // findByCodeでデータベースから一件検索したデータをoriginalEmployeeに代入
-            Employee originalEmployee = employeeService.findByCode(code);
-            // originalEmployeeの中からパスワードを取得し、employeeに設定
-            employee.setPassword(originalEmployee.getPassword());
-
-          //パスワードが空でない場合は画面入力値が暗号化された値を設定
-        } else {
-            // 入力済みのデータをサービスのsaveメソッドを呼び出し、処理結果をresulに代入
-            ErrorKinds result = employeeService.update(employee);
-
-
-
-
+        if (ErrorMessage.contains(result)) {
+            model.addAttribute(ErrorMessage.getErrorName(result), ErrorMessage.getErrorValue(result));
             return "employees/update";
         }
-
-        // サービスに入力項目の保存を指示
-        employeeService.save(employee);
 
         // 従業員一覧画面へリダイレクト
         return "redirect:/employees";
     }
-
 
     // 従業員削除処理
     @PostMapping(value = "/{code}/delete")
@@ -153,16 +151,5 @@ public class EmployeeController {
 
         return "redirect:/employees";
     }
-
-    // 従業員更新画面
-    @GetMapping(value = "/{code}/update")
-    // @PathVariableでパスパラメータ{code}の値をString型の変数として取得、Modelのインスタンス化
-    public String edit(@PathVariable("code") String code, Model model) {
-        //Modelにemployeeという名前で、サービスにて主キー(code)にて一件の検索結果を格納
-        model.addAttribute("employee", employeeService.findByCode(code));
-        // 更新画面へ遷移
-        return "employees/update";
-    }
-
 
 }

@@ -23,7 +23,8 @@
                         </div>
 
                         <div class="card-body">
-                            <form th:action="@{/employees/{code}/update(code=${employee.code})}" th:object="${employee}"  th:method="post">
+                            <!--th:actionでフォームのPOST先URL指定、th:objectでemployeeオブジェクトを指定-->
+                            <form th:action="@{/employees/{code}/update(code=${employee.code})}" th:object="${employee}" th:method="post">
                                 <div class="wizard wizard-success mb-4">
                                     <div class="mb-3">
                                         <label class="form-label" for="code">社員番号</label>
@@ -46,7 +47,7 @@
                                         <label class="form-label" for="password">パスワード</label>
                                         <p class="mb-1"></p>
                                         <div class="col-md-7">
-                                            <input class="form-control" type="password" id="password">
+                                            <input class="form-control" type="password" th:field="*{password}" th:errorclass="err" id="password">
                                             <!--passwordErrorがnullでなければpasswordErrorを表示-->
                                             <span th:if="${passwordError} neq null" th:text="${passwordError}" class="text-danger"></span>
                                         </div>
@@ -62,10 +63,10 @@
                                         </div>
                                     </div>
                                 </div>
-                                    <div class="mt-5">
-                                        <input type="submit" value="更新" class="btn btn-primary">
-                                        <a th:href="@{/employees}" class="btn btn-primary">戻る</a>
-                                    </div>
+                                <div class="mt-5">
+                                    <input type="submit" value="更新" class="btn btn-primary">
+                                    <a th:href="@{/employees}" class="btn btn-primary">戻る</a>
+                                </div>
                             </form>
                         </div>
                     </div>
