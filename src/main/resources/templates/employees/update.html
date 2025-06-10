@@ -10,34 +10,65 @@
         </div>
 
         <div class="mt-3 h-100 col-sm-10">
+            <!-- コンテンツ -->
             <div class="container-fluid p-0">
                 <h1 class="h3 mb-3">従業員 更新</h1>
             </div>
+            <div class="col-12 col-xxl-6">
 
-            <div>
-                <div class="card">
-                    <form>
+                <div class="col-xl-12">
+                    <div class="card">
                         <div class="card-header">
                             パスワードは変更する場合のみ入力してください
                         </div>
+
                         <div class="card-body">
-                            <div>
-                                <label>社員番号</label>
-                                <label>1</label>
-                            </div>
-                            <div>
-                                <label for="name">氏名</label>
-                                <input type="text" id="name" name="name">
-                            <div>
-                                <label for="password">パスワード</label>
-                                <input type="text" id="password" name="name">
-                            </div>
-                                <label for="role">権限</label>
-                                <input type="text" id="role" name="name">
-                            <div>
-                            </div>
+                            <form th:action="@{/employees/{code}/update(code=${employee.code})}" th:object="${employee}"  th:method="post">
+                                <div class="wizard wizard-success mb-4">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="code">社員番号</label>
+                                        <p class="mb-1"></p>
+                                        <div class="col-md-7">
+                                            <!--従業員の社員番号を表示、readonlyで編集不可、form-control-plaintextでBootstrapのフォームの設定、*{code}でemployeeオブジェクトのcodeプロパティを扱う-->
+                                            <input class="form-control-plaintext" type="text" th:field="*{code}" id="code"  readonly>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label" for="name" >氏名</label>
+                                        <p class="mb-1"></p>
+                                        <div class="col-md-7">
+                                            <input class="form-control" type="text" th:field="*{name}" th:errorclass="err" id="name">
+                                            <!--th:errors="*{name}"でnameの入力チェック時のエラーメッセージを表示、"text-danger"でBootstrapを使って赤文字表示-->
+                                            <span th:errors="*{name}" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label" for="password">パスワード</label>
+                                        <p class="mb-1"></p>
+                                        <div class="col-md-7">
+                                            <input class="form-control" type="password" id="password">
+                                            <!--passwordErrorがnullでなければpasswordErrorを表示-->
+                                            <span th:if="${passwordError} neq null" th:text="${passwordError}" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label"for="role" >権限</label>
+                                        <p class="mb-1"></p>
+                                        <div class="col-md-4">
+                                            <select class="form-select" th:field="*{role}" id="role">
+                                                <!--Role型の列挙子を全てitemに代入し、th:valueでitemの属性を出力し、th:textでitemの値を日本語で出力する、th:selectedで初期値はDB値を選択-->
+                                                <option th:each="item:${T(com.techacademy.entity.Employee.Role).values()}" th:value="${item}" th:text="${item.getValue()}" th:selected="*{role} == ${item}">
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                    <div class="mt-5">
+                                        <input type="submit" value="更新" class="btn btn-primary">
+                                        <a th:href="@{/employees}" class="btn btn-primary">戻る</a>
+                                    </div>
+                            </form>
                         </div>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>

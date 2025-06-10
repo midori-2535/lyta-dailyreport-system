@@ -50,6 +50,20 @@ public class EmployeeService {
         return ErrorKinds.SUCCESS;
     }
 
+    // 従業員更新
+    @Transactional
+    public ErrorKinds update(Employee employee) {
+
+
+        employeeRepository.save(employee);
+        return ErrorKinds.SUCCESS;
+    }
+
+
+
+
+
+
     // 従業員削除
     @Transactional
     public ErrorKinds delete(String code, UserDetail userDetail) {
@@ -94,11 +108,12 @@ public class EmployeeService {
 
             return ErrorKinds.RANGECHECK_ERROR;
         }
-
+        // パスワードのハッシュ化
         employee.setPassword(passwordEncoder.encode(employee.getPassword()));
 
         return ErrorKinds.CHECK_OK;
     }
+
 
     // 従業員パスワードの半角英数字チェック処理
     private boolean isHalfSizeCheckError(Employee employee) {
