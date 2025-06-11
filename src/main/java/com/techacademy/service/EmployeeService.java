@@ -67,12 +67,12 @@ public class EmployeeService {
             // パスワードが空だった場合、 データベースに設定済みの値を設定する(originalEmployeeの中からパスワードを取得し、employeeに設定)
             employee.setPassword(originalEmployee.getPassword());
 
-        //パスワードが空でない場合は画面入力値が暗号化された値を設定
+            // パスワードが空でない場合は画面入力値が暗号化された値を設定
         } else {
 
-         // パスワードチェック(employeePasswordCheckメソッドを呼び出して結果をresultに代入)
+            // パスワードチェック(employeePasswordCheckメソッド(パスワードの暗号化も行う)を呼び出し、エラー結果をresultに代入)
             ErrorKinds result = employeePasswordCheck(employee);
-            //ErrorKindsがチェックOKでなければ、エラーの種類をコントローラに返す
+            // ErrorKindsがチェックOKでなければ、エラーの種類をコントローラに返す
             if (ErrorKinds.CHECK_OK != result) {
                 return result;
             }
@@ -80,17 +80,15 @@ public class EmployeeService {
 
         // 現在日時を取得し、nowに代入
         LocalDateTime now = LocalDateTime.now();
-        //更新日時（設定値：現在日時）をemployeeに設定
+        // 更新日時（設定値：現在日時）をemployeeに設定
         employee.setUpdatedAt(now);
-
 
         // リポジトリのsaveメソッドを呼び出し、データベースに保存
         employeeRepository.save(employee);
 
-        //ErrorKindsの列挙子がSUCCESSであることをコントローラに戻す
+        // ErrorKindsの列挙子がSUCCESSであることをコントローラに戻す
         return ErrorKinds.SUCCESS;
-      }
-
+    }
 
     // 従業員削除
     @Transactional
@@ -141,7 +139,6 @@ public class EmployeeService {
 
         return ErrorKinds.CHECK_OK;
     }
-
 
     // 従業員パスワードの半角英数字チェック処理
     private boolean isHalfSizeCheckError(Employee employee) {

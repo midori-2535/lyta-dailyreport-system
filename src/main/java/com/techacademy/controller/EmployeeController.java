@@ -98,11 +98,11 @@ public class EmployeeController {
         return "redirect:/employees";
     }
 
- // 従業員更新画面
+    // 従業員更新画面
     @GetMapping(value = "/{code}/update")
     // @PathVariableでパスパラメータ{code}の値をString型の変数として取得、Modelのインスタンス化
     public String edit(@PathVariable("code") String code, Model model) {
-        //サービスにて主キー(code)にて一件の検索結果をemployeeに代入
+        // サービスにて主キー(code)にて一件の検索結果をemployeeに代入
         Employee employee = employeeService.findByCode(code);
         // パスワードを空文字にし、画面に非表示にする
         employee.setPassword("");
@@ -115,21 +115,25 @@ public class EmployeeController {
     // 従業員更新処理
     @PostMapping(value = "/{code}/update")
     // フォームから送信されたデータをEmployeeエンティティにつめ、@Validatedでエンティティの設定にある入力チェックをし、結果をBindingResultに格納し、モデルのインスタンス化（再表示用）
-    public String update (@PathVariable("code") String code, @Validated Employee employee, BindingResult res, Model model) {
+    public String update(@PathVariable("code") String code, @Validated Employee employee, BindingResult res,
+            Model model) {
 
-     // 入力チェックにエラーがあった場合は更新画面に戻す
-        if(res.hasErrors()) {
-            //モデルにemployeeのデータを渡す
+        // 入力チェックにエラーがあるかどうか
+        if (res.hasErrors()) {
+            // あれば、モデルにemployeeのデータを渡す
             model.addAttribute("employee", employee);
-            // 更新画面へ遷移
+            // モデルの情報を渡して更新画面へ遷移
             return "employees/update";
         }
 
-        // サービスのupdateメソッドを呼び出し、ErrorKindsの列挙子をresulに代入
+        // サービスのupdateメソッドを呼び出し、ErrorKindsの列挙子をresultに代入
         ErrorKinds result = employeeService.update(code, employee);
 
+        // エラーメッセージクラスの中にErrorKindsの列挙子があるかどうか
         if (ErrorMessage.contains(result)) {
+            // あれば、エラーメッセージの名称と値を取得してモデルに渡す
             model.addAttribute(ErrorMessage.getErrorName(result), ErrorMessage.getErrorValue(result));
+            // モデルの情報を渡して更新画面へ遷移
             return "employees/update";
         }
 
@@ -139,7 +143,8 @@ public class EmployeeController {
 
     // 従業員削除処理
     @PostMapping(value = "/{code}/delete")
-    public String delete(@PathVariable("code") String code, @AuthenticationPrincipal UserDetail userDetail, Model model) {
+    public String delete(@PathVariable("code") String code, @AuthenticationPrincipal UserDetail userDetail,
+            Model model) {
 
         ErrorKinds result = employeeService.delete(code, userDetail);
 
