@@ -35,7 +35,7 @@ public class Employee {
         }
     }
 
-    // ID
+    // 社員番号 ID(主キー）
     @Id
     @Column(length = 10)
     @NotEmpty

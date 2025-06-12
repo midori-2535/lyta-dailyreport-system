@@ -20,6 +20,7 @@ public class UserDetail implements UserDetails {
         this.employee = employee;
 
         List<SimpleGrantedAuthority> authorities = new ArrayList<SimpleGrantedAuthority>();
+        // 従業員の権限を追加
         authorities.add(new SimpleGrantedAuthority(employee.getRole().toString()));
         this.authorities = authorities;
     }

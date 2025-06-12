@@ -21,7 +21,8 @@ public class SecurityConfig {
         ).logout(logout -> logout.logoutSuccessUrl("/login") // ログアウト後のリダイレクト先
         ).authorizeHttpRequests(
                 auth -> auth.requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll() // css等は未ログインでアクセス可
-                        .requestMatchers("/employees/**").hasAnyAuthority("ADMIN").anyRequest().authenticated()); // その他はログイン必要
+                        .requestMatchers("/employees/**").hasAnyAuthority("ADMIN") // 認可機能の設定箇所：従業員管理は管理者のみアクセス可
+                        .anyRequest().authenticated()); // その他はログイン必要
 
         return http.build();
     }
