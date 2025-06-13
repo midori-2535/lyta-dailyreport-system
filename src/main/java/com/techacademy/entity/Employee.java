@@ -1,16 +1,18 @@
-
 package com.techacademy.entity;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.hibernate.annotations.SQLRestriction;
 import org.hibernate.validator.constraints.Length;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
@@ -69,4 +71,8 @@ public class Employee {
     @Column(nullable = false)
     private LocalDateTime updatedAt;
 
+    // 従業員テーブルと日報テーブルは1:多、親子関係のテーブルである、CascadeType.ALL従業員テーブル(親)全ての操作(従業員削除や更新操作など)を日報テーブル(子)に伝播
+    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
+    // 結合先のエンティティが子(複数)
+    private List<Report> reportList;
 }

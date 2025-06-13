@@ -129,9 +129,9 @@ public class EmployeeController {
         // サービスのupdateメソッドを呼び出し、ErrorKindsの列挙子をresultに代入
         ErrorKinds result = employeeService.update(code, employee);
 
-        // エラーメッセージクラスの中にErrorKindsの列挙子があるかどうか
+        // エラーメッセージクラスの中にErrorKindsの列挙子があるかどうか(ErrorMessageクラスcontainsメソッド)をチェック
         if (ErrorMessage.contains(result)) {
-            // あれば、エラーメッセージの名称と値を取得してモデルに渡す
+            // あれば、エラーメッセージの名称(getErrorNameメソッド)と値(getErrorValueメソッド)を取得してモデルに渡す
             model.addAttribute(ErrorMessage.getErrorName(result), ErrorMessage.getErrorValue(result));
             // モデルの情報を渡して更新画面へ遷移
             return "employees/update";

@@ -125,13 +125,13 @@ public class EmployeeService {
 
         // 従業員パスワードの半角英数字チェック処理
         if (isHalfSizeCheckError(employee)) {
-
+            // YES(正規表現にマッチしなかった)なのでHALFSIZE_ERRORを返す
             return ErrorKinds.HALFSIZE_ERROR;
         }
 
         // 従業員パスワードの8文字～16文字チェック処理
         if (isOutOfRangePassword(employee)) {
-
+            // YES(8文字未満、あるいは16文字超え)なのでRANGECHECK_ERRORを返す
             return ErrorKinds.RANGECHECK_ERROR;
         }
         // パスワードのハッシュ化
@@ -140,20 +140,23 @@ public class EmployeeService {
         return ErrorKinds.CHECK_OK;
     }
 
-    // 従業員パスワードの半角英数字チェック処理
+    // 従業員パスワードが半角英数字のみで構成されているかをチェック
     private boolean isHalfSizeCheckError(Employee employee) {
 
-        // 半角英数字チェック
+        // 半角英数字を正規表現パターンとして生成
         Pattern pattern = Pattern.compile("^[A-Za-z0-9]+$");
+        // 従業員のパスワードが正規表現パターンにマッチするかチェック
         Matcher matcher = pattern.matcher(employee.getPassword());
+        // パターンにマッチしたかどうかの結果の逆を返す(マッチしなかったらYESを返す)
         return !matcher.matches();
     }
 
-    // 従業員パスワードの8文字～16文字チェック処理
+    // 従業員パスワードが8文字～16文字かチェック
     public boolean isOutOfRangePassword(Employee employee) {
 
-        // 桁数チェック
+        // 従業員のパスワードの桁数を測定
         int passwordLength = employee.getPassword().length();
+        // 測定結果が8文字未満、あるいは16文字超えならYESを返す
         return passwordLength < 8 || 16 < passwordLength;
     }
 
