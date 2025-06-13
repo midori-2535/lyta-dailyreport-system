@@ -61,9 +61,9 @@ public class Report {
     @Column(nullable = false)
     private LocalDateTime updatedAt;
 
-    //日報テーブルと従業員テーブルは多:1のリレーション
+    // 日報テーブルと従業員テーブルは多:1のリレーション
     @ManyToOne
-    //日報テーブルのemployee_codeは外部キーで、従業員テーブルのcodeと紐づき、必ず存在しなければならない(codeのないemployee_codeは存在しない)
+    // 日報テーブルのemployee_codeは外部キーで、従業員テーブルのcodeと紐づき、必ず存在しなければならない(codeのないemployee_codeは存在しない)
     @JoinColumn(name = "employee_code", referencedColumnName = "code", nullable = false)
     // 結合先のエンティティ
     private Employee employee;

@@ -13,10 +13,10 @@ public class TopController {
         return "login/login";
     }
 
-    // ログイン後のトップページ表示
+    // ログイン後のトップページ表示 (ログイン成功時は、日報一覧画面に当たる「/reports」にリダイレクト)
     @GetMapping(value = "/")
     public String top() {
-        return "redirect:/employees";
+        return "redirect:/reports";
     }
 
 }
