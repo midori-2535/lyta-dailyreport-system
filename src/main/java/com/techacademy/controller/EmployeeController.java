@@ -35,7 +35,9 @@ public class EmployeeController {
     @GetMapping
     public String list(Model model) {
 
+        // 従業員数をカウントして件数をモデルに登録
         model.addAttribute("listSize", employeeService.findAll().size());
+        // 従業員を全件検索してモデルに登録
         model.addAttribute("employeeList", employeeService.findAll());
 
         return "employees/list";
@@ -106,7 +108,7 @@ public class EmployeeController {
         Employee employee = employeeService.findByCode(code);
         // パスワードを空文字にし、画面に非表示にする
         employee.setPassword("");
-        // Modelにemployeeという名前で、employeeのデータを格納
+        // Modelに"employee"という名前で、employeeのデータを格納
         model.addAttribute("employee", employee);
         // 更新画面へ遷移
         return "employees/update";
@@ -142,7 +144,7 @@ public class EmployeeController {
     }
 
     // 従業員削除処理
-    @PostMapping(value = "/{code}/delete")
+    @PostMapping(value = "/{code}/delete") // Spring Securityの@AuthenticationPrincipalでログインユーザーの情報を取得
     public String delete(@PathVariable("code") String code, @AuthenticationPrincipal UserDetail userDetail,
             Model model) {
 

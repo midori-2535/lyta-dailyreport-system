@@ -16,12 +16,17 @@ public class UserDetail implements UserDetails {
     private final Employee employee;
     private final List<SimpleGrantedAuthority> authorities;
 
+    // UserDetailServiceから受け取ったemployeeエンティティを元にインスタンス化
     public UserDetail(Employee employee) {
+
+        // 渡されたemployeeエンティティを丸ごと格納
         this.employee = employee;
 
+        // employeeの権限プロパティを元にリストをインスタンス化、初期化
         List<SimpleGrantedAuthority> authorities = new ArrayList<SimpleGrantedAuthority>();
-        // 従業員の権限を追加
+        // 従業員の権限(ADMIN/GENERAL)をSimpleGrantedAuthorityのauthoritiesリストに登録
         authorities.add(new SimpleGrantedAuthority(employee.getRole().toString()));
+        // 権限リストをフィールドに格納
         this.authorities = authorities;
     }
 

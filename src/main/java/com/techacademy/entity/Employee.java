@@ -23,15 +23,20 @@ import lombok.Data;
 @SQLRestriction("delete_flg = false")
 public class Employee {
 
+    // Employeeクラス内でRole列挙型(enum)を定義
     public static enum Role {
+        //列挙子と日本語のラベルを対応付け
         GENERAL("一般"), ADMIN("管理者");
 
+        // 各Roleに対応する日本語を格納するフィールド
         private String name;
 
+        // 列挙子のコンストラクタ
         private Role(String name) {
             this.name = name;
         }
 
+        // 日本語のラベルを取得するメソッド
         public String getValue() {
             return this.name;
         }
@@ -50,8 +55,9 @@ public class Employee {
     @Length(max = 20)
     private String name;
 
-    // 権限
+    // 権限  VARCHAR(10)でRole列挙型の列挙子は最大10文字まで
     @Column(columnDefinition = "VARCHAR(10)", nullable = false)
+    // テーブルのカラムの列挙子を文字列型(ADMIN/GENERAL)に指定
     @Enumerated(EnumType.STRING)
     private Role role;
 
