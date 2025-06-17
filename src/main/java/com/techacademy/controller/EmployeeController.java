@@ -31,7 +31,7 @@ public class EmployeeController {
         this.employeeService = employeeService;
     }
 
-    // 従業員一覧画面
+    // 従業員一覧画面を表示
     @GetMapping
     public String list(Model model) {
 
@@ -43,7 +43,7 @@ public class EmployeeController {
         return "employees/list";
     }
 
-    // 従業員詳細画面
+    // 従業員詳細画面を表示
     @GetMapping(value = "/{code}/")
     public String detail(@PathVariable("code") String code, Model model) {
 
@@ -51,7 +51,7 @@ public class EmployeeController {
         return "employees/detail";
     }
 
-    // 従業員新規登録画面
+    // 従業員新規登録画面を表示
     @GetMapping(value = "/add")
     public String create(@ModelAttribute Employee employee) {
 
@@ -100,7 +100,7 @@ public class EmployeeController {
         return "redirect:/employees";
     }
 
-    // 従業員更新画面
+    // 従業員更新画面を表示
     @GetMapping(value = "/{code}/update")
     // @PathVariableでパスパラメータ{code}の値をString型の変数として取得、Modelのインスタンス化
     public String edit(@PathVariable("code") String code, Model model) {

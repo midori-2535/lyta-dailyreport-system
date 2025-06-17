@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import org.hibernate.annotations.SQLRestriction;
+import org.hibernate.validator.constraints.Length;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -38,14 +39,16 @@ public class Report {
     private LocalDate reportDate;
 
     // タイトル
-    @Column(length = 100, nullable = false) // データべ－スにnullを禁止
+    @Column(length = 100, nullable = false) // データべ－スカラムに最大100文字、nullを禁止
     @NotEmpty // 入力チェックで空文字がないか確認
+    @Length(max = 100) // 入力チェックで文字数100文字制限
     private String title;
 
     // 内容
     // MYSQLの特定のデータ型LONGTEXTに対応させるためにcolumnDefinitionを設定
     @Column(columnDefinition = "LONGTEXT", nullable = false)
     @NotEmpty // 入力チェックで空文字がないか確認
+    @Length(max = 600) // 入力チェックで文字数600文字制限
     private String content;
 
     // 削除フラグ(論理削除を行うため)

@@ -46,13 +46,13 @@ public class Employee {
     @Id
     @Column(length = 10)
     @NotEmpty
-    @Length(max = 10)
+    @Length(max = 10) // 入力チェックで文字数10文字制限
     private String code;
 
-    // 名前
+    // 氏名
     @Column(length = 20, nullable = false)
     @NotEmpty
-    @Length(max = 20)
+    @Length(max = 20) // 入力チェックで文字数20文字制限
     private String name;
 
     // 権限  VARCHAR(10)でRole列挙型の列挙子は最大10文字まで
