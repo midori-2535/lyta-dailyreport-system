@@ -2,6 +2,7 @@ package com.techacademy.controller;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,7 +12,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.techacademy.entity.Employee;
 import com.techacademy.entity.Employee.Role;
+import com.techacademy.constants.ErrorKinds;
+import com.techacademy.constants.ErrorMessage;
 import com.techacademy.entity.Report;
 import com.techacademy.service.ReportService;
 import com.techacademy.service.UserDetail;
@@ -22,6 +26,7 @@ public class ReportController {
 
     private final ReportService reportService;
 
+    @Autowired
     public ReportController(ReportService reportService) {
         this.reportService = reportService;
     }
@@ -72,23 +77,36 @@ public class ReportController {
     }
 
     // 日報新規登録処理
-    @PostMapping(value = "add")
-    public String add(@AuthenticationPrincipal UserDetail userDetail, @Validated Report report, BindingResult res, Model model) {
+    @PostMapping(value = "/add")
+    public String add(@AuthenticationPrincipal UserDetail userDetail, @Validated Report report, BindingResult res,
+            Model model) {
 
         // 入力チェックにエラーがあるかどうか
         if (res.hasErrors()) {
-            // エラーのあるReportオブジェクトを再表示するためにモデルに追加
-            model.addAttribute("report", report);
+
             // 日報新規登録画面を表示するメソッド呼び出し
             return create(userDetail, model, report);
-
         }
 
+        // ログイン中の従業員の社員番号を取得(日報テーブル必須項目)するために、userDetailを経由してEmployeeオブジェクトを取得
+        Employee employee = userDetail.getEmployee();
+        // reportエンティティにemployeeプロパティをセット
+        report.setEmployee(employee);
 
+        // サービスsaveメソッドを呼び出し、エラーの種類をresultに格納
+        ErrorKinds result = reportService.save(report);
 
+        // もしエラーメッセージクラスの中に該当のエラーの種類があれば
+        if (ErrorMessage.contains(result)) {
 
-        // 日報一覧画面に遷移
-        return "reports/list";
+            // エラーメッセージの名称と値を取得してモデルにセット
+            model.addAttribute(ErrorMessage.getErrorName(result), ErrorMessage.getErrorValue(result));
+            // 日報新規登録画面を表示するメソッド呼び出し
+            return create(userDetail, model, report);
+        }
+
+        // 該当のErrorMessageなければ(ErrorKindsの列挙子がSUCCESS)日報一覧画面にリダイレクト
+        return "redirect:/reports";
     }
 
 }

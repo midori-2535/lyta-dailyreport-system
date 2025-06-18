@@ -28,7 +28,7 @@ public class Employee {
         //列挙子と日本語のラベルを対応付け
         GENERAL("一般"), ADMIN("管理者");
 
-        // 各Roleに対応する日本語を格納するフィールド
+        // 各Roleに対応する日本語を格納するフィールドの定義
         private String name;
 
         // 列挙子のコンストラクタ

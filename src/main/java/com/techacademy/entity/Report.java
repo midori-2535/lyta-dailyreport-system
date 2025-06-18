@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 
 import org.hibernate.annotations.SQLRestriction;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -27,7 +28,7 @@ public class Report {
 
     // ID (主キー)
     @Id // null禁止、UNIQUE制約で重複禁止含
-    // @GeneratedValueで主キーの値を一意に自動生成 (GenerationTypeでAUTO_INCREMENTを設定)
+    // GeneratedValueで主キーの値を一意に自動生成 (GenerationTypeでAUTO_INCREMENTを設定)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     // MYSQLに対応する変数の型を指定(Integerはnull許容と汎用性のため)
     private Integer id;
@@ -35,6 +36,8 @@ public class Report {
     // 日付
     @Column(nullable = false)
     @NotNull // 入力チェックでnull(データが存在しない)を確認
+    // HTMLから送信されたデータを日付型のデータに変換(文字列は"yyyy-MM-dd"形式)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     // MYSQLのデータ型DATEに対応するエンティティのデータ型を設定
     private LocalDate reportDate;
 

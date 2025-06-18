@@ -76,8 +76,9 @@ public class EmployeeController {
 
         }
 
-        // 入力チェック
+        // もし入力チェックでエラーがあれば、
         if (res.hasErrors()) {
+            // 従業員新規登録画面を表示するメソッド呼び出し
             return create(employee);
         }
 
