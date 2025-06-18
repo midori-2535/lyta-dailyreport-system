@@ -27,6 +27,8 @@
                                         <div class="col-md-3">
                                             <input class="form-control" type="date" th:field="*{reportDate}" th:errorclass="err" id="reportDate">
                                             <span th:errors="*{reportDate}" class="text-danger"></span>
+                                            <!--同一日付チェック用エラーメッセージreportDateErrorがあれば表示-->
+                                            <span th:if="${reportDateError} neq null" th:text="${reportDateError}" class="text-danger"></span>
                                         </div>
                                     </div>
                                     <div class="mb-2">
@@ -42,8 +44,6 @@
                                         <div class="col-md-7">
                                             <input class="form-control" type="text" th:field="*{title}" th:errorclass="err" id="title">
                                             <span th:errors="*{title}" class="text-danger"></span>
-                                            <!--同一日付チェック用エラーメッセージreportDateErrorがあれば表示-->
-                                            <span th:if="${reportDateError} neq null" th:text="${reportDateError}" class="text-danger"></span>
                                         </div>
                                     </div>
                                     <div class="mb-2">

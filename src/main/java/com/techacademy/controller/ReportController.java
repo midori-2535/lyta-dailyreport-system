@@ -63,6 +63,14 @@ public class ReportController {
 
     }
 
+    // 日報詳細画面を表示
+    //@GetMapping(value="/{id}/")
+    public String detail() {
+
+        return "reports/detail";
+    }
+
+
     // 日報新規登録画面を表示
     @GetMapping(value = "/add") // Spring Securityの@AuthenticationPrincipalでログインユーザーの情報を受け取る
     public String create(@AuthenticationPrincipal UserDetail userDetail, Model model, Report report) {
@@ -108,5 +116,7 @@ public class ReportController {
         // 該当のErrorMessageなければ(ErrorKindsの列挙子がSUCCESS)日報一覧画面にリダイレクト
         return "redirect:/reports";
     }
+
+
 
 }
