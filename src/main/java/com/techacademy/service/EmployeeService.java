@@ -102,7 +102,7 @@ public class EmployeeService {
         LocalDateTime now = LocalDateTime.now();
         employee.setUpdatedAt(now);
         employee.setDeleteFlg(true);
-
+        // 論理削除セット
         return ErrorKinds.SUCCESS;
     }
 
@@ -115,7 +115,7 @@ public class EmployeeService {
     public Employee findByCode(String code) {
         // findByIdで検索
         Optional<Employee> option = employeeRepository.findById(code);
-        // // OptionはJavaの構文で、取得できなかった場合はnullを返す
+        // OptionはJavaの構文で、取得できなかった場合はnullを返す
         Employee employee = option.orElse(null);
         return employee;
     }

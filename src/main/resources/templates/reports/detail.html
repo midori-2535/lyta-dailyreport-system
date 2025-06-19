@@ -25,41 +25,45 @@
                                 <table class="table table-striped">
                                     <tr>
                                         <th class="w-25">日付</th>
-                                        <td class="align-middle" ></td>
+                                        <td class="align-middle" th:text="${report.reportDate}"></td>
                                     </tr>
                                     <tr>
                                         <th class="w-25">氏名</th>
-                                        <td class="align-middle" ></td>
+                                        <td class="align-middle" th:text="${report.employee.name}"></td>
                                     </tr>
                                     <tr>
                                         <th class="w-25">タイトル</th>
-                                        <td class="align-middle" ></td>
+                                        <td class="align-middle" th:text="${report.title}"></td>
                                     </tr>
                                     <tr>
                                         <th class="w-25">内容</th>
-                                        <td class="align-middle" ></td>
+                                        <!--preで改行を保持して表示-->
+                                        <td class="align-middle"><pre th:text="${report.content}"></pre></td>
                                     </tr>
                                     <tr>
                                         <th class="w-25">登録日時</th>
-                                        <td class="align-middle" ></td>
+                                        <!--#temporalsで登録日時欄を「yyyy-MM-dd hh:mm:ss」の表示形式に設定-->
+                                        <td class="align-middle" th:text="${#temporals.format(report.createdAt, 'yyyy-MM-dd hh:mm:ss')}"></td>
                                     </tr>
                                     <tr>
                                         <th class="w-25">更新日時</th>
-                                        <td class="align-middle" >日付</td>
+                                        <!--#temporalsで更新日時欄を「yyyy-MM-dd hh:mm:ss」の表示形式に設定-->
+                                        <td class="align-middle" th:text="${#temporals.format(report.updatedAt, 'yyyy-MM-dd hh:mm:ss')}"></td>
                                     </tr>
                                 </table>
                                 <div class="mt-5 row g-1">
-                                    <div class="col-auto">
-                                        <a>更新</a>
+                                    <div class="col-auto" >
+                                        <a class="btn btn-primary">更新</a>
                                     </div>
                                     <div class="col-auto">
-                                        <a>削除</a>
+                                        <form name="form" th:action="@{/reports/{id}/delete(id=${id})}" th:method="post">
+                                            <input type="submit" value="削除" class="btn btn-primary">
+                                        </form>
                                     </div>
                                     <div class="col-auto">
-                                        <a>戻る</a>
+                                        <a th:href="@{/reports}" class="btn btn-primary">戻る</a>
                                     </div>
                                 </div>
-                                <span>エラー</span>
                             </div>
                         </div>
                     </div>

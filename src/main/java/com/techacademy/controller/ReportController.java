@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -64,9 +65,10 @@ public class ReportController {
     }
 
     // 日報詳細画面を表示
-    //@GetMapping(value="/{id}/")
-    public String detail() {
+    @GetMapping(value="/{id}/")
+    public String detail(@PathVariable("id") Integer id, Model model) {
 
+        model.addAttribute("report", reportService.findById(id));
         return "reports/detail";
     }
 
@@ -116,6 +118,21 @@ public class ReportController {
         // 該当のErrorMessageなければ(ErrorKindsの列挙子がSUCCESS)日報一覧画面にリダイレクト
         return "redirect:/reports";
     }
+
+
+    // 日報削除処理
+    @PostMapping (value = "/{id}/delete")
+    public String delete(@PathVariable("id") Integer id) {
+
+        // サービスのdeleteメソッド呼び出し
+        reportService.delete(id);
+
+        // 日報一覧画面へ遷移
+        return "redirect:/reports";
+
+    }
+
+
 
 
 

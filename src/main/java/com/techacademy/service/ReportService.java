@@ -66,4 +66,24 @@ public class ReportService {
         return ErrorKinds.SUCCESS;
     }
 
+    // 1件を検索
+    public Report findById(Integer id) {
+
+        Optional<Report> option = reportRepository.findById(id);
+        // OptionはJavaの構文で、取得できなかった場合はnullを返す
+        Report report = option.orElse(null);
+        return report;
+    }
+
+    // 日報削除
+    @Transactional
+    public void delete(Integer id) {
+
+        Report report = findById(id);
+        LocalDateTime now = LocalDateTime.now();
+        report.setUpdatedAt(now);
+        // 論理削除セット
+        report.setDeleteFlg(true);
+    }
+
 }

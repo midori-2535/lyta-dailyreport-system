@@ -145,7 +145,7 @@ public class EmployeeController {
     }
 
     // 従業員削除処理
-    @PostMapping(value = "/{code}/delete") // Spring Securityの@AuthenticationPrincipalでログインユーザーの情報を取得
+    @PostMapping(value = "/{code}/delete") // Spring Securityの@AuthenticationPrincipalでログイン中のユーザーの情報を取得
     public String delete(@PathVariable("code") String code, @AuthenticationPrincipal UserDetail userDetail,
             Model model) {
 

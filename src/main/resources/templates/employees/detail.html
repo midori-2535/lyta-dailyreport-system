@@ -37,12 +37,14 @@
                                     </tr>
                                     <tr>
                                         <th>登録日時</th>
+                                        <!--#temporalsで登録日時欄を「yyyy-MM-dd hh:mm:ss」の表示形式に設定-->
                                         <td class="align-middle"
                                             th:text="${#temporals.format(employee.createdAt, 'yyyy-MM-dd hh:mm:ss')}">
                                         </td>
                                     </tr>
                                     <tr>
                                         <th>更新日時</th>
+                                        <!--#temporalsで更新日時欄を「yyyy-MM-dd hh:mm:ss」の表示形式に設定-->
                                         <td class="align-middle"
                                             th:text="${#temporals.format(employee.updatedAt, 'yyyy-MM-dd hh:mm:ss')}">
                                         </td>
