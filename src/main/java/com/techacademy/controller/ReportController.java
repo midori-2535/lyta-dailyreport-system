@@ -49,9 +49,9 @@ public class ReportController {
         } else {
 
             // userDetailを経由してEmployeeエンティティの社員番号プロパティを取得
-            String employeeCode = userDetail.getEmployee().getCode();
+            Employee employee = userDetail.getEmployee();
             // 社員番号によって自分の日報のみを取得
-            reportList = reportService.findByEmployeeCode(employeeCode);
+            reportList = reportService.findByEmployee(employee);
 
         }
 

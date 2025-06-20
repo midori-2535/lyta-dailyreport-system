@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.techacademy.constants.ErrorKinds;
+import com.techacademy.entity.Employee;
 import com.techacademy.entity.Report;
 import com.techacademy.repository.ReportRepository;
 
@@ -26,8 +27,8 @@ public class ReportService {
     }
 
     // 社員番号で検索して特定の社員の日報を取得(一般ユーザ用)
-    public List<Report> findByEmployeeCode(String employeeCode) {
-        return reportRepository.findByEmployeeCode(employeeCode);
+    public List<Report> findByEmployee(Employee employee) {
+        return reportRepository.findByEmployee(employee);
     }
 
     // 日報保存
