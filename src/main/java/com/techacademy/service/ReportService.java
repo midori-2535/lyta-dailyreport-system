@@ -35,13 +35,13 @@ public class ReportService {
     @Transactional
     public ErrorKinds save(Report report) {
 
-        // 新規登録画面にログイン中の社員番号を特定(reportエンティティのemployeeプロパティを経由してemployeeのcodeプロパティを取得)
-        String employeeCode = report.getEmployee().getCode();
+        // 新規登録画面にログイン中の社員番号を特定
+        Employee employee = report.getEmployee();
         // 入力した日付を特定
         LocalDate reportDate = report.getReportDate();
 
         // ログイン中の社員番号と入力日が同じ日報を検索
-        Optional<Report> option = reportRepository.findByEmployeeCodeAndReportDate(employeeCode, reportDate);
+        Optional<Report> option = reportRepository.findByEmployeeAndReportDate(employee, reportDate);
         // OptionはJavaの構文で、取得できなかった場合はnullを返す
         Report previousReport = option.orElse(null);
 
@@ -77,12 +77,12 @@ public class ReportService {
         // もし更新フォームで日付を変更したら重複チェック(reportの日付とoriginalReportの日付の不一致)
         if (!(report.getReportDate().equals(originalReport.getReportDate()))) {
 
-            // 更新画面で表示中の社員番号を特定(reportエンティティのemployeeプロパティを経由してemployeeのcodeプロパティを取得)
-            String employeeCode = report.getEmployee().getCode();
+            // 更新画面で表示中の社員番号を特定
+            Employee employee = report.getEmployee();
             // 入力した日付を取得
             LocalDate reportDate = report.getReportDate();
             // 表示中の社員番号と入力日が同じ日報を検索(過去に作成済みの日報の中に日付が重複した日報がないかDBをチェック)
-            Optional<Report> option = reportRepository.findByEmployeeCodeAndReportDate(employeeCode, reportDate);
+            Optional<Report> option = reportRepository.findByEmployeeAndReportDate(employee, reportDate);
             // OptionはJavaの構文で、取得できなかった場合はnullを返す
             Report previousReport = option.orElse(null);
 
