@@ -34,7 +34,7 @@ public class ReportService {
     @Transactional
     public ErrorKinds save(Report report) {
 
-        // ログイン中の社員番号を特定(reportエンティティのemployeeプロパティを経由してemployeeのcodeプロパティを取得)
+        // 新規登録画面にログイン中の社員番号を特定(reportエンティティのemployeeプロパティを経由してemployeeのcodeプロパティを取得)
         String employeeCode = report.getEmployee().getCode();
         // 入力した日付を特定
         LocalDate reportDate = report.getReportDate();
@@ -66,13 +66,48 @@ public class ReportService {
         return ErrorKinds.SUCCESS;
     }
 
-    // 1件を検索
-    public Report findById(Integer id) {
+    // 日報更新
+    @Transactional
+    public ErrorKinds update(Integer id, Report report) {
 
-        Optional<Report> option = reportRepository.findById(id);
-        // OptionはJavaの構文で、取得できなかった場合はnullを返す
-        Report report = option.orElse(null);
-        return report;
+        // 更新対象の元のデータを取得(DBから一件検索した結果をoriginalReportに代入）
+        Report originalReport = findById(id);
+
+        // もし更新フォームで日付を変更したら重複チェック(reportの日付とoriginalReportの日付の不一致)
+        if (!(report.getReportDate().equals(originalReport.getReportDate()))) {
+
+            // 更新画面で表示中の社員番号を特定(reportエンティティのemployeeプロパティを経由してemployeeのcodeプロパティを取得)
+            String employeeCode = report.getEmployee().getCode();
+            // 入力した日付を取得
+            LocalDate reportDate = report.getReportDate();
+            // 表示中の社員番号と入力日が同じ日報を検索(過去に作成済みの日報の中に日付が重複した日報がないかDBをチェック)
+            Optional<Report> option = reportRepository.findByEmployeeCodeAndReportDate(employeeCode, reportDate);
+            // OptionはJavaの構文で、取得できなかった場合はnullを返す
+            Report previousReport = option.orElse(null);
+
+            // もし重複した日報が見つかれば
+            if ((previousReport != null)) {
+
+                // もし同じ日付があれば重複のため、ErrorKindsの列挙子がDATECHECK_ERROR(同一日付チェックエラー)であることを返す
+                return ErrorKinds.DATECHECK_ERROR;
+            }
+
+        }
+
+        // 作成日時をemployeeにセット（DB保存時のgetCreatedAtのnullエラー防止のため)
+        report.setCreatedAt(originalReport.getCreatedAt());
+        // 削除フラグをreportにセット（null防止、boolean型のためgetではなくis)
+        report.setDeleteFlg(report.isDeleteFlg());
+        // 現在日時を取得し、nowに代入
+        LocalDateTime now = LocalDateTime.now();
+        // 更新日時セット（設定値：現在日時）
+        report.setUpdatedAt(now);
+
+        // リポジトリのsaveメソッドを呼び出し、データベースに保存
+        reportRepository.save(report);
+
+        // ErrorKindsの列挙子がSUCCESSであることをコントローラに戻す
+        return ErrorKinds.SUCCESS;
     }
 
     // 日報削除
@@ -80,10 +115,21 @@ public class ReportService {
     public void delete(Integer id) {
 
         Report report = findById(id);
+        // 現在日時を取得し、nowに代入
         LocalDateTime now = LocalDateTime.now();
+        // 更新日時セット（設定値：現在日時）
         report.setUpdatedAt(now);
         // 論理削除セット
         report.setDeleteFlg(true);
+    }
+
+    // IDによって1件を検索
+    public Report findById(Integer id) {
+
+        Optional<Report> option = reportRepository.findById(id);
+        // OptionはJavaの構文で、取得できなかった場合はnullを返す
+        Report report = option.orElse(null);
+        return report;
     }
 
 }

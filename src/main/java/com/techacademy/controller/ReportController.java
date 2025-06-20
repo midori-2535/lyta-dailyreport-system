@@ -65,13 +65,14 @@ public class ReportController {
     }
 
     // 日報詳細画面を表示
-    @GetMapping(value="/{id}/")
+    @GetMapping(value = "/{id}/")
+    // @PathVariableでパスパラメータ{id}の値をInteger型の変数として取得、Modelのインスタンス化
     public String detail(@PathVariable("id") Integer id, Model model) {
 
+        // サービスにて主キー(id)にて一件の検索結果をreportに代入
         model.addAttribute("report", reportService.findById(id));
         return "reports/detail";
     }
-
 
     // 日報新規登録画面を表示
     @GetMapping(value = "/add") // Spring Securityの@AuthenticationPrincipalでログインユーザーの情報を受け取る
@@ -88,13 +89,14 @@ public class ReportController {
 
     // 日報新規登録処理
     @PostMapping(value = "/add")
+    // フォームから送信されたデータをreportエンティティにつめ、@Validatedでエンティティの設定にある入力チェックをし、結果をBindingResultに格納し、モデルのインスタンス化（再表示用）
     public String add(@AuthenticationPrincipal UserDetail userDetail, @Validated Report report, BindingResult res,
             Model model) {
 
         // 入力チェックにエラーがあるかどうか
         if (res.hasErrors()) {
 
-            // 日報新規登録画面を表示するメソッド呼び出し
+            // あれば、日報新規登録画面を表示するメソッド呼び出し
             return create(userDetail, model, report);
         }
 
@@ -119,9 +121,53 @@ public class ReportController {
         return "redirect:/reports";
     }
 
+    // 日報更新画面を表示
+    @GetMapping(value = "/{id}/update")
+    // @PathVariableでパスパラメータ{id}の値をInteger型の変数として取得、Modelのインスタンス化
+    public String edit(@PathVariable("id") Integer id, Model model) {
+        // サービスにて主キー(id)にて一件の検索結果をreportに代入
+        model.addAttribute("report", reportService.findById(id));
+        // 日報更新画面へ遷移
+        return "reports/update";
+    }
+
+    // 日報更新処理
+    @PostMapping(value = "/{id}/update")
+    // フォームから送信されたデータをreportエンティティにつめ、@Validatedでエンティティの設定にある入力チェックをし、結果をBindingResultに格納し、モデルのインスタンス化（再表示用）
+    public String update(@PathVariable("id") Integer id, @Validated Report report, BindingResult res, Model model) {
+
+        // フォームの氏名の値は再送信できないため、再取得(日報IDで該当の日報を検索し、originalReportに代入）
+        Report originalReport = reportService.findById(id);
+        // originalReportから取得したemployeeプロパティをセットし、Employeeエンティティの全てのプロパティを取得(th:value="${report.employee.name}"に対応させるため)
+        report.setEmployee(originalReport.getEmployee());
+
+        // 入力チェックにエラーがあれば
+        if (res.hasErrors()) {
+
+            // あれば、モデルにreportのデータを渡す
+            model.addAttribute("report", report);
+            // モデルの情報を渡して更新画面へ遷移
+            return "reports/update";
+        }
+
+        // サービスsaveメソッドを呼び出し、エラーの種類をresultに格納
+        ErrorKinds result = reportService.update(id, report);
+
+        // もしエラーメッセージクラスの中に該当のエラーの種類があれば
+        if (ErrorMessage.contains(result)) {
+
+            // エラーメッセージの名称と値を取得してモデルにセット
+            model.addAttribute(ErrorMessage.getErrorName(result), ErrorMessage.getErrorValue(result));
+            // 日報更新画面を表示するメソッド呼び出し
+            return "reports/update";
+        }
+
+        // 該当のErrorMessageなければ(ErrorKindsの列挙子がSUCCESS)日報一覧画面にリダイレクト
+        return "redirect:/reports";
+    }
 
     // 日報削除処理
-    @PostMapping (value = "/{id}/delete")
+    @PostMapping(value = "/{id}/delete")
     public String delete(@PathVariable("id") Integer id) {
 
         // サービスのdeleteメソッド呼び出し
@@ -131,9 +177,5 @@ public class ReportController {
         return "redirect:/reports";
 
     }
-
-
-
-
 
 }

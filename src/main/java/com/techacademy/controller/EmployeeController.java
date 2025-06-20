@@ -109,7 +109,7 @@ public class EmployeeController {
         Employee employee = employeeService.findByCode(code);
         // パスワードを空文字にし、画面に非表示にする
         employee.setPassword("");
-        // Modelに"employee"という名前で、employeeのデータを格納
+        // モデルに"employee"という名前で、employeeのデータを格納
         model.addAttribute("employee", employee);
         // 更新画面へ遷移
         return "employees/update";

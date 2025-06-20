@@ -54,7 +54,7 @@ public class EmployeeService {
     @Transactional
     public ErrorKinds update(String code, Employee employee) {
 
-        // findByCodeでデータベースから一件検索した結果をoriginalEmployeeに代入
+        // findByCodeでDBから一件検索した結果をoriginalEmployeeに代入
         Employee originalEmployee = findByCode(code);
         // 作成日時をemployeeに設定（更新画面作成時のgetCreatedAtのnullエラー防止のため)
         employee.setCreatedAt(originalEmployee.getCreatedAt());
@@ -64,7 +64,7 @@ public class EmployeeService {
         // パスワードが空文字" "かどうかをチェック、getPassword()はemployeeエンティティの@Dataで生成
         if ("".equals(employee.getPassword())) {
 
-            // パスワードが空だった場合、 データベースに設定済みの値を設定する(originalEmployeeの中からパスワードを取得し、employeeに設定)
+            // パスワードが空だった場合、 DBに設定済みの値を設定する(originalEmployeeの中からパスワードを取得し、employeeに設定)
             employee.setPassword(originalEmployee.getPassword());
 
             // パスワードが空でない場合は画面入力値が暗号化された値を設定
