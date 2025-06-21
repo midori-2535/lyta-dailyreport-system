@@ -38,10 +38,10 @@
                                     <tr>
                                         <th class="w-25">内容</th>
                                         <!--preで改行を保持して表示-->
-                                        <td class="align-middle"><pre th:text="${report.content}"></pre></td>
+                                        <td class="align-middle"><pre th:text="${report.content}" style="max-height: 300px; overflow-y: auto; white-space: pre-wrap;"></pre></td>
                                     </tr>
                                     <tr>
-                                        <th class="w-25">登録日時</th>
+                                        <th lass="w-25">登録日時</th>
                                         <!--#temporalsで登録日時欄を「yyyy-MM-dd hh:mm:ss」の表示形式に設定-->
                                         <td class="align-middle" th:text="${#temporals.format(report.createdAt, 'yyyy-MM-dd hh:mm:ss')}"></td>
                                     </tr>
